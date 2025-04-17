@@ -38,7 +38,7 @@
 
     <script>
       const buscarVendedores = async () => {
-        const response = await fetch("http://painel-de-vendas-production.up.railway.app:3000/vendedores");
+        const response = await fetch("http://painel-de-vendas-production.up.railway.app/vendedores");
         const vendedores = await response.json();
         const select = document.getElementById("nome");
         vendedores.forEach((vendedor) => {
@@ -58,7 +58,7 @@
         const data = document.getElementById("data").value;
         const dataFormatada = new Date(data).toISOString().split("T")[0]; 
 
-        const url = `http://painel-de-vendas-production.up.railway.app:3000/vendas`;
+        const url = `http://painel-de-vendas-production.up.railway.app/vendas`;
     
         fetch(url, ({
             method:"POST",
