@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/painel.html'));
 });
 
-app.get('/vendedores', (req, res) => {
+app.get('/vendedores_page', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/vendedores.html'));
 });
 
@@ -83,5 +83,5 @@ app.post('/vendas', (req, res) => {
 
 
 app.listen(process.env.PORT, () => {
-    console.log(`Servidor rodando na porta ${port}`);
+    console.log(`Servidor rodando na porta ${process.env.PORT}`);
 })
