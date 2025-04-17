@@ -48,7 +48,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/vendas?data=${filtro}`
+            `http://painel-de-vendas-production.up.railway.app:3000/vendas?data=${filtro}`
           );
           const vendas = await response.json();
 
