@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel de Vendas - Riachão</title>
+    <link rel="stylesheet" href="/public/css/vendedor.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="title">
+        <h1>Painel De Vendas</h1>
+      </div>
+      <form id="vendas-form" onsubmit="enviarValor()">
+        <div class="form-group">
+          <label for="nome">Selecione Seu Nome:</label>
+          <select
+            id="nome"
+            name="nome"
+            required
+          ></select>
+        </div>
+
+        <div class="form-group">
+          <label for="valor">Valor do Dia :</label>
+          <input type="number" id="valor" name="valor" required />
+        </div>
+
+        <div class="form-group">
+          <label for="data">Selecione a data:</label>
+          <input type="date" id="data" name="data" required />
+        </div>
+
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <script>
+      const buscarVendedores = async () => {
+        const response = await fetch("http://localhost:3000/vendedores");
+        const vendedores = await response.json();
+        const select = document.getElementById("nome");
+        vendedores.forEach((vendedor) => {
+          const option = document.createElement("option");
+          option.value = vendedor.id;
+          option.textContent = vendedor.nome;
+          select.appendChild(option);
+        });
+      };
+      buscarVendedores();
+
+      const enviarValor = () => {
+        event.preventDefault(); 
+        const vendedor_id = document.getElementById("nome").value;
+        const valor = document.getElementById("valor").value;
+        const valorFormatado = parseFloat(valor).toFixed(2);
+        const data = document.getElementById("data").value;
+        const dataFormatada = new Date(data).toISOString().split("T")[0]; 
+
+        const url = `http://localhost:3000/vendas`;
+    
+        fetch(url, ({
+            method:"POST",
+            headers:{
+                "content-type":"application/json"
+            },
+            body: JSON.stringify({
+                vendedor_id,
+                dataFormatada,
+                valorFormatado
+            })
+        })) 
+        .then((response) => {
+            if (response.ok) {
+                alert("Valor enviado com sucesso!");
+                console.log(dataFormatada, vendedor_id, valorFormatado);
+            } else {
+                alert("Erro ao enviar o valor.");
+            }
+        })
+        .catch((error) => {
+            console.error("Erro:", error);
+            alert("Erro ao enviar requisição.");
+            console.log(dataFormatada, vendedor_id, valor);
+        });
+        
+    }
+
+    </script>
+  </body>
+</html>

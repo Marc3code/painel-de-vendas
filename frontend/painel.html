@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Painel de vendas - Riachão</title>
+    <link rel="stylesheet" href="/public/css/painel.css" />
+  </head>
+  <body>
+    <h1>Painel de Vendas</h1>
+
+    <form id="form">
+      <label for="data">Selecione a data:</label>
+      <input type="date" id="data" />
+      <button type="submit">Buscar</button>
+    </form>
+
+    <table border="1" id="tabela">
+      <thead>
+        <tr>
+          <th>Vendedor</th>
+          <th>Meta Diária</th>
+          <th>Total Vendido</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- dados vão aqui -->
+      </tbody>
+    </table>
+
+    <script>
+      const META_DIARIA = 500.00;
+
+      const buscarVendas = async (event, dataParam = null) => {
+        if (event) event.preventDefault();
+
+        let filtro = dataParam || document.getElementById("data").value;
+
+        if (!filtro) {
+          const hoje = new Date();
+          hoje.setDate(hoje.getDate() - 1); // ontem
+          const dia = String(hoje.getDate()).padStart(2, "0");
+          const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+          const ano = hoje.getFullYear();
+          filtro = `${ano}-${mes}-${dia}`;
+          document.getElementById("data").value = filtro;
+        }
+
+        try {
+          const response = await fetch(`http://localhost:3000/vendas?data=${filtro}`);
+          const vendas = await response.json();
+
+          const tabelaBody = document.querySelector("#tabela tbody");
+          tabelaBody.innerHTML = "";
+
+          const porVendedor = {};
+          vendas.forEach(v => {
+            if (!porVendedor[v.vendedor]) porVendedor[v.vendedor] = 0;
+            porVendedor[v.vendedor] += parseFloat(v.valor);
+          });
+
+          for (const vendedor in porVendedor) {
+            const total = porVendedor[vendedor];
+            const status = total >= META_DIARIA ? "✅ Bateu" : "❌ Não bateu";
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${vendedor}</td>
+              <td>R$ ${META_DIARIA.toFixed(2)}</td>
+              <td>R$ ${total.toFixed(2)}</td>
+              <td>${status}</td>
+            `;
+            tabelaBody.appendChild(tr);
+          }
+        } catch (err) {
+          console.error("Erro ao buscar vendas:", err);
+        }
+      };
+
+      document.getElementById("form").addEventListener("submit", buscarVendas);
+
+      // 👉 Executa automaticamente com a data de ontem ao abrir a página
+      window.addEventListener("DOMContentLoaded", () => {
+        buscarVendas(null);
+      });
+    </script>
+  </body>
+</html>
