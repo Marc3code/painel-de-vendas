@@ -13,19 +13,19 @@ app.use(cors({
 }));
 
 
-
-const frontendPath = path.join(__dirname, '..', 'frontend');
+// Arquivos estáticos:
+res.sendFile(path.join(__dirname, './frontend/public'));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'painel.html'));
+  res.sendFile(path.join(__dirname, './frontend/painel.html'));
 });
 
 app.get('/vendedores_page', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'vendedores.html'));
+    res.sendFile(path.join(__dirname, './frontend/vendedor.html'));
 });
 
-// Arquivos estáticos:
-app.use(express.static(path.join(frontendPath, 'public')));
+
+
 
 app.get('/vendas', (req, res) => {
     const { data } = req.query;
