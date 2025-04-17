@@ -58,7 +58,7 @@
         const data = document.getElementById("data").value;
         const dataFormatada = new Date(data).toISOString().split("T")[0]; 
 
-        const url = `${window.location.origin}//vendas`;
+        const url = `${window.location.origin}/vendas`;
     
         fetch(url, ({
             method:"POST",

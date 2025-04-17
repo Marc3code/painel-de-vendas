@@ -13,7 +13,7 @@ app.use(cors({
 }));
 
 // Servir arquivos estáticos (CSS, JS, imagens etc.)
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 // Rotas para páginas HTML
 app.get('/', (req, res) => {
