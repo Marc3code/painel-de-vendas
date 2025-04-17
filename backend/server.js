@@ -8,7 +8,9 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-app.use(cors());
+app.use(cors({
+    origin: '*',
+}));
 
 // Servir arquivos estáticos (CSS, JS, imagens etc.)
 app.use(express.static(path.join(__dirname, '../public')));
