@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./db.js');
 const path = require('path');
-const port = 3000;
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -79,6 +80,6 @@ app.post('/vendas', (req, res) => {
 
 
 
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
     console.log(`Servidor rodando na porta ${port}`);
 })
