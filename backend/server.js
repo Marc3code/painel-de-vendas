@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./db.js');
+const path = require('path');
 const port = 3000;
 
 const app = express();
@@ -8,9 +9,17 @@ app.use(express.json());
 
 app.use(cors());
 
+// Servir arquivos estáticos (CSS, JS, imagens etc.)
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Rotas para páginas HTML
 app.get('/', (req, res) => {
-    res.send('api funcionando')
-})
+  res.sendFile(path.join(__dirname, '../frontend/painel.html'));
+});
+
+app.get('/vendedores', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/vendedores.html'));
+});
 
 app.get('/vendas', (req, res) => {
     const { data } = req.query;

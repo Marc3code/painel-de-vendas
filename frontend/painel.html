@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Painel de vendas - Riachão</title>
-    <link rel="stylesheet" href="/public/css/painel.css" />
+    <link rel="stylesheet" href="/css/painel.css" />
   </head>
   <body>
     <h1>Painel de Vendas</h1>
@@ -29,7 +29,7 @@
     </table>
 
     <script>
-      const META_DIARIA = 500.00;
+      const META_DIARIA = 500.0;
 
       const buscarVendas = async (event, dataParam = null) => {
         if (event) event.preventDefault();
@@ -47,14 +47,22 @@
         }
 
         try {
-          const response = await fetch(`http://localhost:3000/vendas?data=${filtro}`);
+          const response = await fetch(
+            `http://localhost:3000/vendas?data=${filtro}`
+          );
           const vendas = await response.json();
+
+          if (!vendas || vendas.length === 0) {
+            alert("Nenhuma venda encontrada para a data selecionada.");
+            return;
+          }
+            
 
           const tabelaBody = document.querySelector("#tabela tbody");
           tabelaBody.innerHTML = "";
 
           const porVendedor = {};
-          vendas.forEach(v => {
+          vendas.forEach((v) => {
             if (!porVendedor[v.vendedor]) porVendedor[v.vendedor] = 0;
             porVendedor[v.vendedor] += parseFloat(v.valor);
           });
